@@ -25,10 +25,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         message = input("Send messagge: ")
         data = message.encode()
         s.send(data)
-        # Get only message
-        response = s.recv(buffer_size)
-        print(f"> {response.decode()}")
         # Check close message
         if message == "close":
             print("Client closed")
             break
+        # Get only message
+        response = s.recv(buffer_size)
+        print(f"> {response.decode()}")

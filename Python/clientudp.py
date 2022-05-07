@@ -23,10 +23,10 @@ with socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) as s:
         message = input("Send messagge: ")
         data = message.encode()
         s.sendto(data, (HOST, PORT))
-        # Get only message
-        response = s.recv(buffer_size)
-        print(f"> {response.decode()}")
         # Check close message
         if message == "close":
             print("Client closed")
             break
+        # Get only message
+        response = s.recv(buffer_size)
+        print(f"> {response.decode()}")
