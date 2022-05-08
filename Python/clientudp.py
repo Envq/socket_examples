@@ -28,7 +28,7 @@ with socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) as s:
         if message == "close":
             print("Client closed")
             break
-        # # get only reply
-        # response = s.recv(buffer_size)
-        # # process reply
-        # print(f"> {response.decode()}")
+        # get only reply
+        response = s.recv(buffer_size)
+        # process reply
+        print(f"> {response.decode()}")

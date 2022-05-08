@@ -1,25 +1,26 @@
-#ifndef SERVERUDP_H
-#define SERVERUDP_H
+#ifndef CLIENTUDP_H
+#define CLIENTUDP_H
 
 #include <QNetworkDatagram>
 #include <QObject>
 #include <QUdpSocket>
 
 
-class ServerUDP : public QObject {
+class ClientUDP : public QObject {
     Q_OBJECT
 
   public:
-    explicit ServerUDP(QObject* parent = 0);
-    ~ServerUDP();
+    explicit ClientUDP(QObject* parent = 0);
+    ~ClientUDP();
 
     void init(const QString& address, unsigned port);
+    void send(const QString& message);
 
 
   private:
     QUdpSocket* _socket;
 
-    void _processRequest(const QNetworkDatagram& request);
+    void _processReply(const QNetworkDatagram& reply);
 
 
   public slots:
@@ -31,4 +32,4 @@ class ServerUDP : public QObject {
 };
 
 
-#endif  // SERVERUDP_H
+#endif  // CLIENTUDP_H

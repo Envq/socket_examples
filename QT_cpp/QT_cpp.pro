@@ -19,6 +19,7 @@ HEADERS += \
     clientudp.h \
     serverudp.h
 
-SOURCES += main.cpp \
+SOURCES += \
     clientudp.cpp \
-    serverudp.cpp
+    serverudp.cpp \
+    main.cpp \

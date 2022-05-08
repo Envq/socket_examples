@@ -1,6 +1,6 @@
 #include "serverudp.h"
+
 #include <QDebug>
-#include <QThread>
 
 
 ServerUDP::ServerUDP(QObject* parent) : QObject(parent) {
@@ -28,6 +28,7 @@ void ServerUDP::init(const QString& address, unsigned port) {
                            << ":" << port;
     }
 }
+
 
 void ServerUDP::readyRead() {
     // all datagrams arrived before this function is finished will be executed
