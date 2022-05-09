@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import socket
 import sys
+import struct
 
 # settings
 HOST = "127.0.0.1"
@@ -21,15 +22,16 @@ with socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) as s:
     print("UDP client ready")
     while(True):
         # listen for incoming data from User
-        message = input("Send messagge: ")
-        data = message.encode()
+        message = int(input("Send unsigned int: "))
+        request = struct.pack('!II', message, 130)
         # send request
-        s.sendto(data, (HOST, PORT))
+        s.sendto(request, (HOST, PORT))
         # check close message
-        if message == "close":
+        if message == 42:
             print("Client closed")
             break
         # get only reply
-        reply = s.recv(buffer_size)
+        rawdata = s.recv(buffer_size)
+        data = struct.unpack('!iiiiii', rawdata)
         # process reply
-        print(f"> {reply.decode()}")
+        print(f"> {data}")

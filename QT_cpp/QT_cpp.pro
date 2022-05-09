@@ -20,10 +20,12 @@ HEADERS += \
     serverudp.h \
     clienttcp.h \
     servertcp.h \
+    struct_clientudp.h \
 
 SOURCES += \
     clientudp.cpp \
     serverudp.cpp \
     clienttcp.cpp \
     servertcp.cpp \
+    struct_clientudp.cpp \
     main.cpp \
