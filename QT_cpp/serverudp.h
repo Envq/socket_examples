@@ -23,7 +23,8 @@ class ServerUDP : public QObject {
 
 
   public slots:
-    void readyRead();
+    void onErrorOccurred(QAbstractSocket::SocketError socketError);
+    void onReadyRead();
 
 
   signals:

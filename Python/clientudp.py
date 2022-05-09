@@ -16,6 +16,7 @@ print(f"Selected: -> {HOST}:{PORT}")
 
 # create a UDP socket at client side
 with socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) as s:
+    s.settimeout(10)
     buffer_size = 1024
     print("UDP client ready")
     while(True):

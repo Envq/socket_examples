@@ -1,6 +1,7 @@
 #ifndef CLIENTUDP_H
 #define CLIENTUDP_H
 
+#include <QAbstractSocket>
 #include <QNetworkDatagram>
 #include <QObject>
 #include <QUdpSocket>
@@ -24,7 +25,8 @@ class ClientUDP : public QObject {
 
 
   public slots:
-    void readyRead();
+    void onErrorOccurred(QAbstractSocket::SocketError socketError);
+    void onReadyRead();
 
 
   signals:

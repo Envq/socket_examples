@@ -16,6 +16,7 @@ print("Selected: -> {}:{}".format(HOST,PORT))
 
 # Create a TCP socket at client side
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.settimeout(10)
     buffer_size = 1024
     print("TCP client ready")
     s.connect((HOST, PORT))
@@ -26,7 +27,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         data = message.encode()
         s.send(data)
         # Check close message
-        if message == "close":
+        if message == "close" or message == "closeall":
             print("Client closed")
             break
         # Get only message

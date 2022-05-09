@@ -17,9 +17,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     clientudp.h \
-    serverudp.h
+    serverudp.h \
+    clienttcp.h \
+    servertcp.h \
 
 SOURCES += \
     clientudp.cpp \
     serverudp.cpp \
+    clienttcp.cpp \
+    servertcp.cpp \
     main.cpp \

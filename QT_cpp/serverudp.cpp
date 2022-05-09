@@ -5,7 +5,9 @@
 
 ServerUDP::ServerUDP(QObject* parent) : QObject(parent) {
     _socket = new QUdpSocket(this);
-    connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(_socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this,
+            SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 }
 
 
@@ -30,7 +32,13 @@ void ServerUDP::init(const QString& address, unsigned port) {
 }
 
 
-void ServerUDP::readyRead() {
+void ServerUDP::onErrorOccurred(QAbstractSocket::SocketError socketError) {
+    qCritical() << "onErrorOccurred" << socketError;
+    emit finished();
+}
+
+
+void ServerUDP::onReadyRead() {
     // all datagrams arrived before this function is finished will be executed
     // immediately without waiting for a new call to this function
     while (_socket->hasPendingDatagrams()) {
@@ -51,7 +59,8 @@ void ServerUDP::_processRequest(const QNetworkDatagram& request) {
                        << "]: " << message;
     if (message == "close") {
         emit finished();
+    } else {
+        // send reply
+        _socket->writeDatagram(request.makeReply(data));
     }
-    // send reply
-    _socket->writeDatagram(request.makeReply(data));
 }

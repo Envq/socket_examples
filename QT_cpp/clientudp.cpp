@@ -1,11 +1,14 @@
 #include "clientudp.h"
 
 #include <QDebug>
+#include <iostream>
 
 
 ClientUDP::ClientUDP(QObject* parent) : QObject(parent) {
     _socket = new QUdpSocket(this);
-    connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(_socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this,
+            SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 }
 
 
@@ -17,29 +20,32 @@ ClientUDP::~ClientUDP() {
 
 
 void ClientUDP::init(const QString& address, unsigned port) {
-    // Try to connect to Server
+    // This is a convenient way to make the socket remember the address and port
+    // and then use write instead of writeDatagram
     _socket->connectToHost(address, port);
-    if (!_socket->waitForConnected(500)) {
-        qWarning().nospace()
-            << "Can't connect on: " << address.toStdString().c_str() << ":"
-            << port;
-        emit finished();
-    }
+    qDebug().nospace() << "Selected: -> " << address.toStdString().c_str()
+                       << ":" << port;
+    send("start");
 }
 
 
 void ClientUDP::send(const QString& message) {
     _socket->write(message.toUtf8());
-    if (!_socket->waitForBytesWritten()) {
-        qWarning() << "Error in sending:" << message;
-    }
+    // Note: QUdpSocket sends data immediately, so there's no need to use
+    // waitForBytesWritten
     if (message == "close") {
         emit finished();
     }
 }
 
 
-void ClientUDP::readyRead() {
+void ClientUDP::onErrorOccurred(QAbstractSocket::SocketError socketError) {
+    qCritical() << "errorOccurred" << socketError;
+    emit finished();
+}
+
+
+void ClientUDP::onReadyRead() {
     // all datagrams arrived before this function is finished will be executed
     // immediately without waiting for a new call to this function
     while (_socket->hasPendingDatagrams()) {
@@ -55,4 +61,9 @@ void ClientUDP::_processReply(const QNetworkDatagram& reply) {
     // process reply
     QString message(data);
     qDebug() << ">" << message;
+    // get new message to send
+    std::string line;
+    std::cout << "Send: ";
+    std::cin >> line;
+    send(QString(line.c_str()));
 }
