@@ -10,9 +10,16 @@
 int main(int argc, char* argv[]) {
     QCoreApplication app(argc, argv);
 
+    //    auto s = new ServerUDP();
+    //    QObject::connect(s, SIGNAL(finished()), s, SLOT(deleteLater()));
+    //    QObject::connect(s, SIGNAL(finished()), &app, SLOT(quit()),
+    //                     Qt::QueuedConnection);
+    //    s->init("127.0.0.1", 2002);
+    //    return app.exec();
+
     bool udp            = 0;
     bool server         = 0;
-    bool struct_version = 1;
+    bool struct_version = 0;
 
     if (struct_version) {
         qDebug() << "CLIENT UDP STRUCT VERSION";
